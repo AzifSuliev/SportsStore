@@ -7,7 +7,7 @@
         </div>
         <div class="col-md-6 text-end pt-4">
             <a asp-controller="Category" asp-action="Create" class="btn btn-primary">
-                Добавить категорию 
+                <i class="bi bi-plus-square"></i> Добавить категорию
             </a>
         </div>
     </div>
@@ -20,8 +20,8 @@
                     <div class="card-body">
                         <h5 class="card-title">@category.Name</h5>
                        @*  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> *@
-                        <a asp-controller="Category" asp-action="Edit" class="btn btn-primary">Редактировать</a>
-                        <a asp-action="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger">Удалить</a>
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Изменить</a>
+                        <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger"><i class="bi bi-trash"></i> Удалить</a>
                     </div>
                 </div>
             </div>

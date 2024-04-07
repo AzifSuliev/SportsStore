@@ -41,7 +41,7 @@ namespace SportsStore.Controllers
         public IActionResult Edit(int id)
         {
             if (id == null || id == 0) NotFound();
-            Category categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id.Equals(id));
+            Category? categoryFromDb = _db.Categories.Find(id);
             if (categoryFromDb == null) NotFound();
             return View(categoryFromDb);
         }
@@ -56,6 +56,24 @@ namespace SportsStore.Controllers
                 return RedirectToAction(nameof(Index), "Category");
             }
             return View();
-        } 
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0) NotFound();
+            Category? categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id.Equals(id));
+            if (categoryFromDb == null) NotFound();
+            return View(categoryFromDb);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeletePOST(int id)
+        {
+            Category categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id == id);
+            if (categoryFromDb == null) NotFound();
+            _db.Categories.Remove(categoryFromDb);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index), "Category");
+        }
     }
 }
