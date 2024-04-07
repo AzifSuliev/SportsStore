@@ -19,5 +19,6 @@ namespace SportsStore.Models
         [DisplayName("Порядковый номер")]
         [Range(1,100, ErrorMessage = "Значение вне диапазона")]
         public int DisplayOrder { get; set; }
+        public string? ImageURL { get; set; }
     }
 }

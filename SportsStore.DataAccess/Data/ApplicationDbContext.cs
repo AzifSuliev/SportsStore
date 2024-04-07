@@ -20,10 +20,10 @@ namespace SportsStore.DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, DisplayOrder = 1, Name = "Одежда"},
-                new Category { Id = 2, DisplayOrder = 2, Name = "Обувь"},
-                new Category { Id = 3, DisplayOrder = 3, Name = "Тренажёры"},
-                new Category { Id = 4, DisplayOrder = 4, Name = "Аксессуары"}
+                new Category { Id = 1, DisplayOrder = 1, Name = "Одежда", ImageURL = ""},
+                new Category { Id = 2, DisplayOrder = 2, Name = "Обувь", ImageURL = ""},
+                new Category { Id = 3, DisplayOrder = 3, Name = "Тренажёры", ImageURL = ""},
+                new Category { Id = 4, DisplayOrder = 4, Name = "Аксессуары", ImageURL = ""}
             );
         }
     }

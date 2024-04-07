@@ -16,7 +16,14 @@
         {
             <div class="col-lg-4 col-md-6 mt-4">
                 <div class="card" style="width: 18rem;">
-                    <img src="~/images/empty.png" class="card-img-top" alt="...">
+                    @if(string.IsNullOrEmpty(category.ImageURL))
+                    {
+                        <img src="/images/empty.png" class="card-img-top"/> // изображение по умолчанию 
+                    }
+                    else
+                    {
+                        <img src="@category.ImageURL" class="card-img-top"> // изображение по url
+                    }
                     <div class="card-body">
                         <h5 class="card-title">@category.Name</h5>
                        @*  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> *@

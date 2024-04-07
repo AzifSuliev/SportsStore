@@ -7,9 +7,11 @@ namespace SportsStore.Controllers
     public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public CategoryController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
         {
             _db = db;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -23,7 +25,7 @@ namespace SportsStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Category obj, IFormFile file)
         {
             if(obj.Name == obj.DisplayOrder.ToString())
             {
@@ -31,6 +33,17 @@ namespace SportsStore.Controllers
             }
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string categoryPath = Path.Combine(wwwRootPath, @"images");
+                    using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.ImageURL = @"\images\" + fileName;
+                }
                 _db.Categories.Add(obj); // Добавить категорию
                 _db.SaveChanges(); // Сохранить изменения
                 return RedirectToAction(nameof(Index), "Category");
