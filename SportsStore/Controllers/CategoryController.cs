@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsStore.DataAccess.Data;
 using SportsStore.Models;
+using System.IO;
 
 namespace SportsStore.Controllers
 {
@@ -60,10 +61,28 @@ namespace SportsStore.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Category obj, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                if(file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string categoryPath = Path.Combine(wwwRootPath, @"images");
+                    string filePath = Path.Combine(categoryPath, fileName);
+                    if(!string.IsNullOrEmpty(obj.ImageURL))
+                    {
+                        string oldImagePath = Path.Combine(wwwRootPath, obj.ImageURL.TrimStart('\\'));
+                        FileInfo fileInfo = new FileInfo(oldImagePath);
+                        if (fileInfo.Exists) fileInfo.Delete();
+                    }
+                    using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    obj.ImageURL = @"\images\" + fileName;
+                }
                 _db.Categories.Update(obj);
                 _db.SaveChanges();
                 return RedirectToAction(nameof(Index), "Category");
@@ -84,6 +103,11 @@ namespace SportsStore.Controllers
         {
             Category categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id == id);
             if (categoryFromDb == null) NotFound();
+            if(!string.IsNullOrEmpty(categoryFromDb.ImageURL))
+            {
+                var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, categoryFromDb.ImageURL.TrimStart('\\'));
+                if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
+            }
             _db.Categories.Remove(categoryFromDb);
             _db.SaveChanges();
             return RedirectToAction(nameof(Index), "Category");
