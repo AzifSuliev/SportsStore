@@ -28,26 +28,42 @@ namespace SportsStore.Controllers
         [HttpPost]
         public IActionResult Create(Category obj, IFormFile file)
         {
-            if(obj.Name == obj.DisplayOrder.ToString())
+            if (obj.Name == obj.DisplayOrder.ToString())
             {
                 ModelState.AddModelError("name", "Порядковый номер не должен совпадать с названием категории");
             }
-            if (ModelState.IsValid)
+            if (file != null && file.Length > 0)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if(file != null)
+
+                if (ModelState.IsValid)
                 {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string categoryPath = Path.Combine(wwwRootPath, @"images");
-                    using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    if (file != null)
                     {
-                        file.CopyTo(fileStream);
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string categoryPath = Path.Combine(wwwRootPath, @"images");
+                        using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        obj.ImageURL = @"\images\" + fileName;
                     }
-                    obj.ImageURL = @"\images\" + fileName;
+                    _db.Categories.Add(obj); // Добавить категорию
+                    _db.SaveChanges(); // Сохранить изменения
+                    TempData["success"] = "Категория была успешно добавлена!";
+                    return RedirectToAction(nameof(Index), "Category");
                 }
-                _db.Categories.Add(obj); // Добавить категорию
-                _db.SaveChanges(); // Сохранить изменения
-                return RedirectToAction(nameof(Index), "Category");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(obj.Name) && !string.IsNullOrEmpty(obj.DisplayOrder.ToString()) && obj.DisplayOrder != 0)
+                {
+                    obj.ImageURL = "/images/empty.png";
+                    _db.Categories.Add(obj); 
+                    _db.SaveChanges();
+                    TempData["success"] = "Категория была успешно добавлена!";
+                    return RedirectToAction(nameof(Index), "Category");
+                }
             }
             return View();
         }
@@ -63,29 +79,43 @@ namespace SportsStore.Controllers
         [HttpPost]
         public IActionResult Edit(Category obj, IFormFile file)
         {
-            if (ModelState.IsValid)
+            if (file != null && file.Length > 0)
             {
-                string wwwRootPath = _webHostEnvironment.WebRootPath;
-                if(file != null)
+                if (ModelState.IsValid)
                 {
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                    string categoryPath = Path.Combine(wwwRootPath, @"images");
-                    string filePath = Path.Combine(categoryPath, fileName);
-                    if(!string.IsNullOrEmpty(obj.ImageURL))
+                    string wwwRootPath = _webHostEnvironment.WebRootPath;
+                    if (file != null)
                     {
-                        string oldImagePath = Path.Combine(wwwRootPath, obj.ImageURL.TrimStart('\\'));
-                        FileInfo fileInfo = new FileInfo(oldImagePath);
-                        if (fileInfo.Exists) fileInfo.Delete();
+                        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        string categoryPath = Path.Combine(wwwRootPath, @"images");
+                        string filePath = Path.Combine(categoryPath, fileName);
+                        if (!string.IsNullOrEmpty(obj.ImageURL))
+                        {
+                            string oldImagePath = Path.Combine(wwwRootPath, obj.ImageURL.TrimStart('\\'));
+                            FileInfo fileInfo = new FileInfo(oldImagePath);
+                            if (fileInfo.Exists) fileInfo.Delete();
+                        }
+                        using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        obj.ImageURL = @"\images\" + fileName;
                     }
-                    using (var fileStream = new FileStream(Path.Combine(categoryPath, fileName), FileMode.Create))
-                    {
-                        file.CopyTo(fileStream);
-                    }
-                    obj.ImageURL = @"\images\" + fileName;
+                    _db.Categories.Update(obj);
+                    _db.SaveChanges();
+                    TempData["success"] = "Категория была успешно изменена!";
+                    return RedirectToAction(nameof(Index), "Category");
                 }
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
-                return RedirectToAction(nameof(Index), "Category");
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(obj.Name) && !string.IsNullOrEmpty(obj.DisplayOrder.ToString()) && obj.DisplayOrder != 0)
+                {
+                    _db.Categories.Update(obj);
+                    _db.SaveChanges();
+                    TempData["success"] = "Категория была успешно изменена!";
+                    return RedirectToAction(nameof(Index), "Category");
+                }
             }
             return View();
         }
@@ -103,13 +133,14 @@ namespace SportsStore.Controllers
         {
             Category categoryFromDb = _db.Categories.FirstOrDefault(u => u.Id == id);
             if (categoryFromDb == null) NotFound();
-            if(!string.IsNullOrEmpty(categoryFromDb.ImageURL))
+            if (!string.IsNullOrEmpty(categoryFromDb.ImageURL))
             {
                 var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, categoryFromDb.ImageURL.TrimStart('\\'));
                 if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
             }
             _db.Categories.Remove(categoryFromDb);
             _db.SaveChanges();
+            TempData["success"] = "Категория была успешно удалена!";
             return RedirectToAction(nameof(Index), "Category");
         }
     }
