@@ -4,8 +4,9 @@ using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
 using System.IO;
 
-namespace SportsStore.Controllers
+namespace SportsStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -69,10 +70,10 @@ namespace SportsStore.Controllers
             return View();
         }
 
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
             if (id == null || id == 0) NotFound();
-            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id == id);
+            Category? categoryFromDb = _unitOfWork.Category.Get(u => u.Id.Equals(id));
             if (categoryFromDb == null) NotFound();
             return View(categoryFromDb);
         }

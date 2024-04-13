@@ -11,7 +11,7 @@ namespace SportsStore.DataAccess.Repository
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _db;
+        private ApplicationDbContext _db;
         public ICategoryRepository Category { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {

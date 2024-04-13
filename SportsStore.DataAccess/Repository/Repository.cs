@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace SportsStore.DataAccess.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class 
     {
         private readonly ApplicationDbContext _db;
         internal DbSet<T> _dbSet;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            _dbSet = _db.Set<T>();
+            this._dbSet = _db.Set<T>();
         }
         public void Add(T entity)
         {
@@ -32,7 +32,7 @@ namespace SportsStore.DataAccess.Repository
         public T Get(Expression<Func<T, bool>> filter)
         {
             IQueryable<T> query = _dbSet;
-            query.Where(filter);
+            query = query.Where(filter);
             return query.FirstOrDefault();
         }
 
