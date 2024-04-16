@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsStore.DataAccess.Data;
 
@@ -10,9 +11,11 @@ using SportsStore.DataAccess.Data;
 namespace SportsStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240415140454_AddAndSeedProductsToDb")]
+    partial class AddAndSeedProductsToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,9 +86,6 @@ namespace SportsStore.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -97,15 +97,12 @@ namespace SportsStore.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CategoryId = 2026,
                             Description = "Ткань: хлопок, размер: XL, цвет: синий",
                             Name = "Футболка мужская",
                             Price = 800m
@@ -113,7 +110,6 @@ namespace SportsStore.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            CategoryId = 2028,
                             Description = "геометрия: 120/73/103 мм, ростовка: 165см, радиус выреза: R12",
                             Name = "Лыжи",
                             Price = 15000m
@@ -121,7 +117,6 @@ namespace SportsStore.DataAccess.Migrations
                         new
                         {
                             Id = 3,
-                            CategoryId = 2025,
                             Description = "Материал: резина",
                             Name = "Шапка для плавания",
                             Price = 500m
@@ -129,7 +124,6 @@ namespace SportsStore.DataAccess.Migrations
                         new
                         {
                             Id = 4,
-                            CategoryId = 3,
                             Description = "Вес: 5 кг, материал: сталь",
                             Name = "Гантели",
                             Price = 2000m
@@ -137,7 +131,6 @@ namespace SportsStore.DataAccess.Migrations
                         new
                         {
                             Id = 5,
-                            CategoryId = 3,
                             Description = "Вес: 53 кг, габариты: 155x73x31 см, Ширина полотна: 45 см",
                             Name = "Беговая дорожка",
                             Price = 50000m
@@ -145,22 +138,10 @@ namespace SportsStore.DataAccess.Migrations
                         new
                         {
                             Id = 6,
-                            CategoryId = 1022,
                             Description = "Материал: резина, цвет: оранжевый",
                             Name = "Мяч баскетбольный",
                             Price = 750m
                         });
-                });
-
-            modelBuilder.Entity("SportsStore.Models.Product", b =>
-                {
-                    b.HasOne("SportsStore.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 #pragma warning restore 612, 618
         }
