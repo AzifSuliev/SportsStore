@@ -9,7 +9,7 @@ namespace SportsStore.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T: class
     {
-        IEnumerable<T> GetAll();
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
 
         /// <summary>
         ///  метод Get принимает фильтр в виде выражения, которое определяет, 
@@ -18,7 +18,7 @@ namespace SportsStore.DataAccess.Repository.IRepository
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        T Get(Expression<Func<T, bool>> filter);
+        T Get(Expression<Func<T, bool>> filter, string? includeProperties = null);
         void Add(T entity);
         void Remove(T entity);
 

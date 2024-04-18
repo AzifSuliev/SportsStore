@@ -15,6 +15,7 @@ namespace SportsStore.Models
         [Key]
         public int Id { get; set; }
         [DisplayName("Название товара")]
+        [Required]
         public string? Name { get; set; }
         [DisplayName("Описание товара")]
         public string? Description { get; set; }
@@ -25,5 +26,8 @@ namespace SportsStore.Models
         [ForeignKey("CategoryId")]
         [ValidateNever]
         public Category Category { get; set; }
+        [ValidateNever]
+        [DisplayName("Добавить изображения")]
+        public List<ProductImage>? ProductImages { get; set; }
     }
 }

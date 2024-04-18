@@ -28,17 +28,18 @@
             <select asp-for="Product.CategoryId" asp-items="@Model.CategoryList" class="form-select border-0 shadow">
                 <option disabled selected>--Выбрать категорию товара--</option>
             </select>
-            
+
             <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
         </div>
-        @*         <div class="mb-3 row p-1">
-        <input type="file" name="file" class="form-control border-0 shadow" />
-        </div> *@
-        <div class="=row pt-3">
-            <div class="col-6">
-                <button type="submit" class="btn btn-primary form-control" style="width:100px;height:40px">Создать</button>
-                <a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:100px;height:40px">Назад</a>
-            </div>
+        <div class="mb-3 row p-1">
+            <label asp-for="Product.ProductImages" style="color:black" class="p-0"></label>
+            <input type="file" name="files" class="form-control border-0 shadow" multiple />
+        </div>
+    </div>
+    <div class="=row pt-3">
+        <div class="col-6">
+            <button type="submit" class="btn btn-primary form-control" style="width:100px;height:40px">Создать</button>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:100px;height:40px">Назад</a>
         </div>
     </div>
 </form>

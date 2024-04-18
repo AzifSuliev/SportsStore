@@ -10,6 +10,7 @@ namespace SportsStore.DataAccess.Repository.IRepository
     {
         public ICategoryRepository Category { get; }
         public IProductRepository Product { get; }
+        public IProductImageRepository ProductImage { get; }
         void Save();
     }
 }
