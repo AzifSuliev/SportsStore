@@ -122,6 +122,13 @@ namespace SportsStore.Areas.Admin.Controllers
             return View();
         }
 
+        public IActionResult ShowItemsOfCategory(int? id)
+        {
+            Category category = _unitOfWork.Category.Get(u => u.Id == id);
+            List<Product> productList = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages").ToList();
+            return View(productList);
+        }
+
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0) NotFound();

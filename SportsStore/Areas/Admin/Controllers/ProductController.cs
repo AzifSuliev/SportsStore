@@ -20,7 +20,7 @@ namespace SportsStore.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> productsFromDb = _unitOfWork.Product.GetAll(includeProperties:"ProductImages").ToList();
+            List<Product> productsFromDb = _unitOfWork.Product.GetAll(includeProperties: "ProductImages").ToList();
             return View(productsFromDb);
         }
 
@@ -72,10 +72,10 @@ namespace SportsStore.Areas.Admin.Controllers
                         _unitOfWork.ProductImage.Add(productImage);
                     }
                 }
-                    _unitOfWork.Product.Add(productVm.Product);
-                    _unitOfWork.Save();
-                    TempData["success"] = "Товар был успешно добавлен!";
-                    return RedirectToAction(nameof(Index), "Product");
+                _unitOfWork.Product.Add(productVm.Product);
+                _unitOfWork.Save();
+                TempData["success"] = "Товар был успешно добавлен!";
+                return RedirectToAction(nameof(Index), "Product");
             }
             else
             {
@@ -99,7 +99,7 @@ namespace SportsStore.Areas.Admin.Controllers
                 })
             };
             if (id == null || id == 0) NotFound();
-            productVM.Product = _unitOfWork.Product.Get(u => u.Id == id);
+            productVM.Product = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
             if (productVM == null) NotFound();
             return View(productVM);
         }
@@ -111,9 +111,9 @@ namespace SportsStore.Areas.Admin.Controllers
             {
                 // WebRootPath предназначен для предоставления физического пути к папке wwwroot
                 string webRootPath = _webHostEnvironment.WebRootPath;
-                if(files != null && files.Count > 0)
+                if (files != null && files.Count > 0)
                 {
-                    foreach(IFormFile file in files)
+                    foreach (IFormFile file in files)
                     {
                         // Генерируется уникальное имя файла с использованием Guid.NewGuid()
                         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
@@ -134,7 +134,7 @@ namespace SportsStore.Areas.Admin.Controllers
                     }
                     _unitOfWork.Product.Update(productVM.Product);
                     _unitOfWork.Save();
-                }               
+                }
                 TempData["success"] = "Товар был успешно изменён!";
                 return RedirectToAction(nameof(Index), "Product");
             }
@@ -152,7 +152,7 @@ namespace SportsStore.Areas.Admin.Controllers
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0) NotFound();
-            Product productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+            Product productFromDb = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
             ProductVM productVM = new ProductVM
             {
                 Product = productFromDb
@@ -165,8 +165,16 @@ namespace SportsStore.Areas.Admin.Controllers
         [ActionName("Delete")]
         public IActionResult DeletePOST(int? id)
         {
-            Product productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+            Product productFromDb = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
             if (productFromDb == null) NotFound();
+            if (productFromDb.ProductImages != null && productFromDb.ProductImages.Count > 0)
+            {
+                foreach (var image in productFromDb.ProductImages)
+                {
+                    string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, image.ImageURL.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImagePath)) System.IO.File.Delete(oldImagePath);
+                }
+            }
             _unitOfWork.Product.Remove(productFromDb);
             _unitOfWork.Save();
             TempData["success"] = "Товар был успешно удалён!";

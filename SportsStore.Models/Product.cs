@@ -25,7 +25,7 @@ namespace SportsStore.Models
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         [ValidateNever]
-        public Category Category { get; set; }
+        public Category? Category { get; set; }
         [ValidateNever]
         [DisplayName("Добавить изображения")]
         public List<ProductImage>? ProductImages { get; set; }
