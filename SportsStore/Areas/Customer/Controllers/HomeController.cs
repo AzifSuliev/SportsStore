@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
 using System.Diagnostics;
 
@@ -8,15 +9,23 @@ namespace SportsStore.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;   
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Product> allProducts = _unitOfWork.Product.GetAll(includeProperties: "ProductImages").ToList();
+            return View(allProducts);
+        }
+
+        public IActionResult Details(int id)
+        {
+            Product product = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
+            return View(product);
         }
 
         public IActionResult Privacy()

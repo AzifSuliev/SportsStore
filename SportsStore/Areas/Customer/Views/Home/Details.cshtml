@@ -1,24 +1,23 @@
-﻿@model ProductVM
-
-<form method="post">
-    <input asp-for="@Model.Product.Id" hidden />
+﻿@model Product
+    <input asp-for="Id" hidden />
+    @* <input asp-for="ImageURL" hidden /> *@
     <div class="border p-3 mt-4">
         <div class="row pb-2">
-            <h2 style="color:black">Удалить товар</h2>
+            <h2 style="color:black">Редактировать товар</h2>
             <hr style="color:black" />
         </div>
-        @if (Model.Product.ProductImages != null && Model.Product.ProductImages.Count > 0)
+        @if (Model.ProductImages != null && Model.ProductImages.Count > 0)
         {
             <div id="carouselExampleIndicators" class="carousel slide d-block w-30 h-30">
                 <div class="carousel-indicators">
-                    @foreach (var imageWithIndex in Model.Product.ProductImages.Select((image, index) => new { Image = image, Index = index }))
+                    @foreach(var imageWithIndex in Model.ProductImages.Select((image, index) => new {Image = image, Index = index}))
                     {
-                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@imageWithIndex.Index"
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="@imageWithIndex.Index" 
                                 class="@(imageWithIndex.Index == 0 ? "active":"")" aria-current="true" aria-label="Slide 1"></button>
                     }
                 </div>
                 <div class="carousel-inner">
-                    @foreach (var imageWithIndex in Model.Product.ProductImages.Select((image, index) => new { Image = image, Index = index }))
+                    @foreach(var imageWithIndex in Model.ProductImages.Select((image, index) => new {Image = image, Index = index}))
                     {
                         <div class="@(imageWithIndex.Index == 0 ? "carousel-item active" : "carousel-item")">
                             <img src="@imageWithIndex.Image.ImageURL" class="d-block w-100 h-30" alt="...">
@@ -36,20 +35,11 @@
             </div>
         }
         @* <div asp-validation-summary="All"></div> *@
-        <div class="mb-3 row p-1">
-            <label style="color:black" asp-for="Product.Name" class="p-0"></label>
-            <input asp-for="Product.Name" disabled class="form-control" />
-        </div>
-        <div class="mb-3 row p-1">
-            <label style="color:black" asp-for="Product.Description" class="p-0"></label>
-            <input asp-for="Product.Description" disabled class="form-control" />
-        </div>
+       
         <div class="=row pt-3">
             <div class="col-6">
-                <button type="submit" class="btn btn-primary form-control" style="width:100px;height:40px">Удалить</button>
-                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-secondary" style="width:100px;height:40px">Назад</a>
+                <button type="submit" class="btn btn-primary form-control" style="width:100px;height:40px">Изменить</button>
+                <a  asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-secondary" style="width:100px;height:40px">Назад</a>
             </div>
         </div>
     </div>
-</form>
-

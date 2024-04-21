@@ -27,8 +27,8 @@
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
                         <h6 class="card-text">@product.Price.ToString("c")</h6>
-                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Изменить</a>
-                        <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger"><i class="bi bi-trash"></i> Удалить</a>
+                        <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Изменить</a>
+                        <aasp-area ="Admin"  asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger"><i class="bi bi-trash"></i> Удалить</aasp-area>
                         <p>@product.Description</p>
                     </div>
                 </div>
