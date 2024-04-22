@@ -35,7 +35,14 @@
             </div>
         }
         @* <div asp-validation-summary="All"></div> *@
-       
+    <div class="mb-3 row p-1">
+        <label style="color:black" asp-for="Name" class="p-0"></label>
+        <input asp-for="Name" disabled class="form-control" />
+    </div>
+    <div class="mb-3 row p-1">
+        <label style="color:black" asp-for="Description" class="p-0"></label>
+        <input asp-for="Description" disabled class="form-control" />
+    </div>
         <div class="=row pt-3">
             <div class="col-6">
                 <button type="submit" class="btn btn-primary form-control" style="width:100px;height:40px">Изменить</button>
