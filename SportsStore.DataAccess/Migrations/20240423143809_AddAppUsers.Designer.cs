@@ -12,7 +12,7 @@ using SportsStore.DataAccess.Data;
 namespace SportsStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240422173903_AddAppUsers")]
+    [Migration("20240423143809_AddAppUsers")]
     partial class AddAppUsers
     {
         /// <inheritdoc />
