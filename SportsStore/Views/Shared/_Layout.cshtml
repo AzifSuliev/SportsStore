@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using SportsStore.Utility
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -23,21 +24,24 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>                       
+                        </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="GetCategories">Категории товара</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Навигация
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Категории товара</a></li>
-                                 <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Список товаров</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
+                        @if (User.IsInRole(StaticDetails.Role_Admin))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Навигация
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Категории товара</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Список товаров</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

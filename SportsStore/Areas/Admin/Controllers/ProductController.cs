@@ -1,14 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
+using SportsStore.Utility;
 
 namespace SportsStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticDetails.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

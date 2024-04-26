@@ -28,9 +28,17 @@ namespace SportsStore.Areas.Customer.Controllers
             return View(product);
         }
 
-        public IActionResult Privacy()
+        public IActionResult GetCategories()
         {
-            return View();
+            List<Category> categories = _unitOfWork.Category.GetAll().ToList();
+            return View(categories);
+        }
+
+        public IActionResult ShowItemsOfCategoryForCustomer(int? id)
+        {
+            Category category = _unitOfWork.Category.Get(x => x.Id == id);
+            List<Product> productlist = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages").ToList();
+            return View(productlist);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

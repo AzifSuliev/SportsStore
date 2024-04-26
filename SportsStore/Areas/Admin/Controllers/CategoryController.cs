@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsStore.DataAccess.Data;
 using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
+using SportsStore.Utility;
 using System.IO;
 
 namespace SportsStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticDetails.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
