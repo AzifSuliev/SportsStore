@@ -16,13 +16,17 @@ namespace SportsStore.DataAccess.Repository
         public IProductRepository Product { get; private set; }
 
         public IProductImageRepository ProductImage { get; private set; }
+        public IShoppingCartRepository ShoppingCart { get; set; }
+        public IApplicationUserRepository ApplicationUser { get; set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             Category = new CategoryRepository(_db);
             Product = new ProductRepository(_db);
-            ProductImage = new ProductImageRepository(_db); 
+            ProductImage = new ProductImageRepository(_db);
+            ShoppingCart = new ShoppingCartRepository(_db);
+            ApplicationUser = new ApplicationUserRepository(_db);
         }
 
         public void Save()
