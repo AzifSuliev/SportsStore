@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace SportsStore.Areas.Customer.Controllers
 {
@@ -12,7 +14,7 @@ namespace SportsStore.Areas.Customer.Controllers
         private readonly IUnitOfWork _unitOfWork;
         public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;   
+            _unitOfWork = unitOfWork;
             _logger = logger;
         }
 
@@ -22,10 +24,44 @@ namespace SportsStore.Areas.Customer.Controllers
             return View(allProducts);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int productId)
         {
-            Product product = _unitOfWork.Product.Get(u => u.Id == id, includeProperties: "ProductImages");
-            return View(product);
+            ShoppingCart shoppingCart = new ShoppingCart()
+            {
+                Product = _unitOfWork.Product.Get(u => u.Id == productId, includeProperties: "Category,ProductImages"),
+                Count = 0,
+                ProductId = productId
+            };
+            return View(shoppingCart);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            // Определение пользователя
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            // Определение корзины пользователя по его Id
+            shoppingCart.ApplicationUserId = userId;
+
+            // извлечение корзины из базы данных (если она есть)
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
+
+            if (cartFromDb != null)
+            {
+                // Корзина существует 
+                cartFromDb.Count += shoppingCart.Count; //  изменение количества товара
+                _unitOfWork.ShoppingCart.Update(cartFromDb); // обновление корзины 
+            }
+            else
+            {
+                // Корзина не существует
+                // Добавление корзины
+                _unitOfWork.ShoppingCart.Add(shoppingCart);
+            }
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult GetCategories()

@@ -31,9 +31,11 @@ namespace SportsStore.DataAccess.Repository
             _dbSet.Remove(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> query;
+            if (tracked) query = _dbSet;
+            else query = _dbSet.AsNoTracking();
             query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {

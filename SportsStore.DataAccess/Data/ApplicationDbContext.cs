@@ -30,7 +30,7 @@ namespace SportsStore.DataAccess.Data
                 new Category { Id = 3, DisplayOrder = 3, Name = "Тренажёры", ImageURL = "" },
                 new Category { Id = 4, DisplayOrder = 4, Name = "Аксессуары", ImageURL = "" }
             );
-
+          // modelBuilder.Entity<ShoppingCart>().Property(p => p.Price).HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {

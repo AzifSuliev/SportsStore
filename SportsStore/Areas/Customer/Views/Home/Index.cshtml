@@ -22,7 +22,7 @@
                     <div class="card-body">
                         <h5 class="card-title">@product.Name</h5>
                         <h6 class="card-text">@product.Price.ToString("c")</h6>
-                        <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@product.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Подробнее</a>                     
+                        <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-productId="@product.Id" class="btn btn-primary"><i class="bi bi-pencil-square"></i> Подробнее</a>                     
                         <p>@product.Description</p>
                     </div>
                 </div>
