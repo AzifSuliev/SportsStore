@@ -11,14 +11,10 @@ namespace SportsStore.DataAccess.Repository
 {
     internal class ApplicationUserRepository : Repository<ApplicationUser>, IApplicationUserRepository
     {
-        private readonly ApplicationDbContext _db;
+        private ApplicationDbContext _db;
         public ApplicationUserRepository(ApplicationDbContext db): base(db)
         {
             _db = db;
-        }
-        public void Update(ApplicationUser user)
-        {
-            _db.ApplicationUsers.Update(user);
         }
     }
 }

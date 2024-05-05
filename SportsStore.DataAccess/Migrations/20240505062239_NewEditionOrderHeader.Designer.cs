@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsStore.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using SportsStore.DataAccess.Data;
 namespace SportsStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240505062239_NewEditionOrderHeader")]
+    partial class NewEditionOrderHeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -488,7 +491,7 @@ namespace SportsStore.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Count")
@@ -499,7 +502,7 @@ namespace SportsStore.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProductId");
 
@@ -629,9 +632,9 @@ namespace SportsStore.DataAccess.Migrations
 
             modelBuilder.Entity("SportsStore.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("SportsStore.Models.ApplicationUser", "AppUser")
+                    b.HasOne("SportsStore.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("SportsStore.Models.Product", "Product")
                         .WithMany()
@@ -639,7 +642,7 @@ namespace SportsStore.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Product");
                 });

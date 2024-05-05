@@ -11,8 +11,10 @@ namespace SportsStore.DataAccess.Repository.IRepository
         public ICategoryRepository Category { get; }
         public IProductRepository Product { get; }
         public IProductImageRepository ProductImage { get; }
-        public IShoppingCartRepository ShoppingCart { get; set; }
-        public IApplicationUserRepository ApplicationUser { get; set; }
+        public IShoppingCartRepository ShoppingCart { get;}
+        public IApplicationUserRepository ApplicationUser { get;}
+        public IOrderHeaderRepository OrderHeader { get;}
+        public IOrderDetailRepository OrderDetail { get;}
         void Save();
     }
 }

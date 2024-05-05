@@ -43,10 +43,10 @@ namespace SportsStore.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             // Определение корзины пользователя по его Id
-            shoppingCart.ApplicationUserId = userId;
+            shoppingCart.AppUserId = userId;
 
             // извлечение корзины из базы данных (если она есть)
-            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.ApplicationUserId == userId && u.ProductId == shoppingCart.ProductId);
+            ShoppingCart cartFromDb = _unitOfWork.ShoppingCart.Get(u => u.AppUserId == userId && u.ProductId == shoppingCart.ProductId);
 
             if (cartFromDb != null)
             {
@@ -73,7 +73,7 @@ namespace SportsStore.Areas.Customer.Controllers
         public IActionResult ShowItemsOfCategoryForCustomer(int? id)
         {
             Category category = _unitOfWork.Category.Get(x => x.Id == id);
-            List<Product> productlist = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages").ToList();
+            List<Product> productlist = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages,Category").ToList();
             return View(productlist);
         }
 

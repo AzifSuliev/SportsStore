@@ -3,6 +3,7 @@ using SportsStore.DataAccess.Data;
 using SportsStore.DataAccess.Repository.IRepository;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -11,31 +12,31 @@ using System.Web.Mvc;
 
 namespace SportsStore.DataAccess.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class 
+    public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
-        internal DbSet<T> _dbSet;
+        internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this._dbSet = _db.Set<T>();
+            this.dbSet = _db.Set<T>();
             _db.Products.Include(u => u.Category);
         }
         public void Add(T entity)
         {
-            _dbSet.Add(entity);
+            dbSet.Add(entity);
         }
 
         public void Remove(T entity)
         {
-            _dbSet.Remove(entity);
+            dbSet.Remove(entity);
         }
 
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
             IQueryable<T> query;
-            if (tracked) query = _dbSet;
-            else query = _dbSet.AsNoTracking();
+            if (tracked) query = dbSet;
+            else query = dbSet.AsNoTracking();
             query = query.Where(filter);
             if (!string.IsNullOrEmpty(includeProperties))
             {
@@ -47,26 +48,25 @@ namespace SportsStore.DataAccess.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter, string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
-            IQueryable<T> query = _dbSet;
+            IQueryable<T> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter);
             }
             if (!string.IsNullOrEmpty(includeProperties))
             {
-                foreach(var includeProp in includeProperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
                     query = query.Include(includeProp);
                 }
             }
             return query.ToList();
         }
-
         public void RemoveRange(IEnumerable<T> entities)
         {
-            _dbSet.RemoveRange(entities);
+            dbSet.RemoveRange(entities);
         }
     }
 }

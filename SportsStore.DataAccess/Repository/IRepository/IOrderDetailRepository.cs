@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace SportsStore.DataAccess.Repository.IRepository
 {
-    public interface IApplicationUserRepository: IRepository<ApplicationUser>
+    public interface IOrderDetailRepository: IRepository<OrderDetail>
     {
+        void Update(OrderDetail entity);
     }
 }

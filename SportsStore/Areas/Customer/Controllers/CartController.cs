@@ -4,6 +4,7 @@ using SportsStore.DataAccess.Data;
 using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
 using SportsStore.Models.ViewModels;
+using SQLitePCL;
 using System.Security.Claims;
 
 
@@ -13,10 +14,9 @@ namespace SportsStore.Areas.Customer.Controllers
     [Authorize]
     public class CartController : Controller
     {
-
-        private readonly IUnitOfWork _unitOfWork;
         [BindProperty]
         public ShoppingCartVM ShoppingCartVM { get; set; }
+        private readonly IUnitOfWork _unitOfWork;
         public CartController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -26,17 +26,16 @@ namespace SportsStore.Areas.Customer.Controllers
             // Определение пользователя
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-
             ShoppingCartVM = new()
             {
-                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product.ProductImages")
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId, includeProperties: "Product.ProductImages"),
+                OrderHeader = new()
             };
 
             foreach (ShoppingCart cart in ShoppingCartVM.ShoppingCartList)
             {
-                ShoppingCartVM.OrderTotal += GetTotalPrice(cart);
+                ShoppingCartVM.OrderHeader.OrderTotal += GetTotalPrice(cart);
             }
-
             return View(ShoppingCartVM);
         }
 
@@ -78,6 +77,31 @@ namespace SportsStore.Areas.Customer.Controllers
             _unitOfWork.ShoppingCart.Remove(shoppingCart);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
+        }
+        public IActionResult Summary()
+        {
+            // Определение пользователя
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartVM = new()
+            {
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId, includeProperties: "Product"),
+                OrderHeader = new()
+            };
+            ShoppingCartVM.OrderHeader.AppUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
+            foreach(ShoppingCart shoppingCart in ShoppingCartVM.ShoppingCartList)
+            {
+                ShoppingCartVM.OrderHeader.OrderTotal += GetTotalPrice(shoppingCart);
+            }
+
+            ShoppingCartVM.OrderHeader.Name = ShoppingCartVM.OrderHeader.AppUser.Name;
+            ShoppingCartVM.OrderHeader.City = ShoppingCartVM.OrderHeader.AppUser.City;
+            ShoppingCartVM.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.AppUser.PostalCode;
+            ShoppingCartVM.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.AppUser.PhoneNumber;
+            ShoppingCartVM.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.AppUser.StreetAddres;
+            return View(ShoppingCartVM);
         }
     }
 }

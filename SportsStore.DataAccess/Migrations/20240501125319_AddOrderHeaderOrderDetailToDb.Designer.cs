@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsStore.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using SportsStore.DataAccess.Data;
 namespace SportsStore.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240501125319_AddOrderHeaderOrderDetailToDb")]
+    partial class AddOrderHeaderOrderDetailToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,7 +323,8 @@ namespace SportsStore.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
+                    b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Carrier")
@@ -366,7 +370,7 @@ namespace SportsStore.DataAccess.Migrations
                     b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("StreetAddress")
+                    b.Property<string>("SreetAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -375,7 +379,7 @@ namespace SportsStore.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("OrderHeaders");
                 });
@@ -488,7 +492,7 @@ namespace SportsStore.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserId")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Count")
@@ -499,7 +503,7 @@ namespace SportsStore.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ProductId");
 
@@ -598,11 +602,13 @@ namespace SportsStore.DataAccess.Migrations
 
             modelBuilder.Entity("SportsStore.Models.OrderHeader", b =>
                 {
-                    b.HasOne("SportsStore.Models.ApplicationUser", "AppUser")
+                    b.HasOne("SportsStore.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("SportsStore.Models.Product", b =>
@@ -629,9 +635,9 @@ namespace SportsStore.DataAccess.Migrations
 
             modelBuilder.Entity("SportsStore.Models.ShoppingCart", b =>
                 {
-                    b.HasOne("SportsStore.Models.ApplicationUser", "AppUser")
+                    b.HasOne("SportsStore.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("SportsStore.Models.Product", "Product")
                         .WithMany()
@@ -639,7 +645,7 @@ namespace SportsStore.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppUser");
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Product");
                 });

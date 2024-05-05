@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace SportsStore.DataAccess.Repository
 {
-    public class ShoppingCartRepository : Repository<ShoppingCart>, IShoppingCartRepository
+    public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderRepository
     {
         private ApplicationDbContext _db;
-        public ShoppingCartRepository(ApplicationDbContext db): base(db)
+        public OrderHeaderRepository(ApplicationDbContext db): base(db)
         {
             _db = db;
         }
-        public void Update(ShoppingCart entity)
+        public void Update(OrderHeader entity)
         {
-            _db.ShoppingCarts.Update(entity);
+            _db.OrderHeaders.Update(entity);
         }
     }
 }
