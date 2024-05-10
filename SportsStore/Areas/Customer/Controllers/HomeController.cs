@@ -63,7 +63,6 @@ namespace SportsStore.Areas.Customer.Controllers
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
-
         public IActionResult GetCategories()
         {
             List<Category> categories = _unitOfWork.Category.GetAll().ToList();
