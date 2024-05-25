@@ -128,7 +128,7 @@ namespace SportsStore.Areas.Admin.Controllers
         public IActionResult ShowItemsOfCategory(int? id)
         {
             Category category = _unitOfWork.Category.Get(u => u.Id == id);
-            List<Product> productList = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages").ToList();
+            List<Product> productList = _unitOfWork.Product.GetAll(x => x.CategoryId == category.Id, includeProperties: "ProductImages,Category").ToList();
             return View(productList);
         }
 

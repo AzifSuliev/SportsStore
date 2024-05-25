@@ -1,0 +1,78 @@
+﻿@{
+    var status = Context.Request.Query["status"];
+    var inProcess = "textPrimary";
+    var completed = "textPrimary";
+    var approved = "textPrimary";
+    var all = "textPrimary";
+
+    switch (status)
+    {
+        case "inProcess":
+            inProcess = "active text-white bg-primary";
+            break;
+        case "completed": 
+            completed = "active text-white bg-primary";
+            break;
+        case "approved":
+            approved = "active text-white bg-primary";
+            break;          
+        default:
+            all = "active text-white bg-primary";
+            break;
+    }
+}
+
+
+<div class="card shadow border-0 my-4">
+    <div class="card-header bg-secondary bg-gradient mt-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white">
+                    Список заказов
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="d-flex justify-content-between pb-5 pt-2">
+            <span></span>
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="inProcess">
+                <li style="background-color: white; color: black; border-color: black" class="list-group-item @inProcess">В процессе</li>
+                </a>
+            </ul>
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="completed">
+                <li style="background-color: white; color: black; border-color: black" class="list-group-item @completed">Завершено</li>
+                </a>
+            </ul>
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="approved">
+                <li style="background-color: white; color: black; border-color: black" class="list-group-item @approved">Подтверждено</li>
+                </a>
+            </ul>
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none" asp-controller="Order" asp-action="Index" asp-route-status="all">
+                <li style="background-color: white; color: black; border-color: black" class="list-group-item @all">Все</li>
+                </a>
+            </ul>
+        </div>
+        <table id="tblData" class="table table-bordered table-striped" style="width:100%; margin-left:-20px">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Имя</th>
+                    <th>Номер телефона</th>
+                    <th>E-mail</th>
+                    <th>Статус заказа</th>
+                    <th>Сумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/order.js"></script>
+}

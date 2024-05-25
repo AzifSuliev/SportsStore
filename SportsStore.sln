@@ -5,11 +5,11 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore", "SportsStore\SportsStore.csproj", "{CF081D2B-1669-48A0-B2E4-4CC551668459}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.DataAccess", "SportsStore.DataAccess\SportsStore.DataAccess.csproj", "{7ADD90C9-E2F4-48CB-B4A6-DC22F869B992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore.DataAccess", "SportsStore.DataAccess\SportsStore.DataAccess.csproj", "{7ADD90C9-E2F4-48CB-B4A6-DC22F869B992}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Models", "SportsStore.Models\SportsStore.Models.csproj", "{A547AC5E-A122-458B-986F-8B18B3F4F651}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore.Models", "SportsStore.Models\SportsStore.Models.csproj", "{A547AC5E-A122-458B-986F-8B18B3F4F651}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsStore.Utility", "SportsStore.Utility\SportsStore.Utility.csproj", "{6E231171-99E5-4163-8B25-80E4CE781571}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsStore.Utility", "SportsStore.Utility\SportsStore.Utility.csproj", "{6E231171-99E5-4163-8B25-80E4CE781571}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

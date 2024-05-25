@@ -12,7 +12,7 @@ namespace SportsStore.DataAccess.Repository
     public class OrderHeaderRepository : Repository<OrderHeader>, IOrderHeaderRepository
     {
         private ApplicationDbContext _db;
-        public OrderHeaderRepository(ApplicationDbContext db): base(db)
+        public OrderHeaderRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
@@ -24,28 +24,31 @@ namespace SportsStore.DataAccess.Repository
         public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
         {
             var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
-            if(orderFromDb != null)
+            if (orderFromDb != null)
             {
                 orderFromDb.OrderStatus = orderStatus;
                 if (!string.IsNullOrEmpty(paymentStatus))
                 {
                     orderFromDb.PaymentStatus = paymentStatus;
-                    orderFromDb.PaymentDate = DateTime.Now; 
                 }
             }
         }
 
-        public void UpdateStripePaymentId(int id, string sessionId, string paymentIntentId)
+        public void UpdateStripePaymentId(int id, string sessionId, string paymmentIntentId)
         {
             var orderFromDb = _db.OrderHeaders.FirstOrDefault(u => u.Id == id);
-            if (!string.IsNullOrEmpty(sessionId))
+            if (orderFromDb != null)
             {
-                orderFromDb.SessionId = sessionId;
-            }
-            if(!string.IsNullOrEmpty(paymentIntentId))
-            {
-                orderFromDb.PaymentIntendId = paymentIntentId;
-                orderFromDb.PaymentDate = DateTime.Now;
+
+                if (!string.IsNullOrEmpty(sessionId))
+                {
+                    orderFromDb.SessionId = sessionId;
+                }
+                if (!string.IsNullOrEmpty(paymmentIntentId))
+                {
+                    orderFromDb.PaymentIntentId = paymmentIntentId;
+                    orderFromDb.PaymentDate = DateTime.Now;
+                }
             }
         }
     }

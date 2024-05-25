@@ -19,7 +19,7 @@
                     @if (string.IsNullOrEmpty(category.ImageURL))
                     {
                         <a asp-controller="Category" asp-action="ShowItemsOfCategory" asp-route-id="@category.Id">
-                            <img src="/images/empty.png" class="card-img-top" /> // изображение по умолчанию
+                            <img src="/images/empty.png" class="card-img-top" /> 
                         </a>
                     }
                     else

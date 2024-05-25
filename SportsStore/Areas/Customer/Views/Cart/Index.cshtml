@@ -87,9 +87,12 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2 offset-md-5">
-                                <a asp-controller="Cart" asp-action="Summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">Готово</a>
-                            </div>
+                            @if (Model.OrderHeader.OrderTotal != 0)
+                            {
+                                <div class="col-md-2 offset-md-5">
+                                    <a asp-controller="Cart" asp-action="Summary" class="btn btn-primary border-0 bg-gradient w-100 py-2">Готово</a>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

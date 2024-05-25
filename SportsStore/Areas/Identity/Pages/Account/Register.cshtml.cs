@@ -36,6 +36,8 @@ namespace SportsStore.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
+        
+
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
@@ -105,7 +107,7 @@ namespace SportsStore.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            public string Role { get; set; }
+            public string Role { get; set; } 
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
             public string? Name { get; set; }
@@ -114,7 +116,6 @@ namespace SportsStore.Areas.Identity.Pages.Account
             public string? PostalCode { get; set; }
             public string? PhoneNumber { get; set; }
         }
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {

@@ -89,7 +89,7 @@ namespace SportsStore.Areas.Customer.Controllers
 
             ShoppingCartVM = new()
             {
-                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId, includeProperties: "Product"),
+                ShoppingCartList = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId, includeProperties: "Product,AppUser"),
                 OrderHeader = new()
             };
             ShoppingCartVM.OrderHeader.AppUser = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
@@ -126,7 +126,6 @@ namespace SportsStore.Areas.Customer.Controllers
             }
 
             ShoppingCartVM.OrderHeader.OrderStatus = StaticDetails.StatusPending; // статус заказа
-            ShoppingCartVM.OrderHeader.PaymentStatus = StaticDetails.PaymentStatusPending; // статус оплаты
 
             _unitOfWork.OrderHeader.Add(ShoppingCartVM.OrderHeader);
             _unitOfWork.Save();
