@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsStore.DataAccess.Repository.IRepository;
 using SportsStore.Models;
+using SportsStore.Utility;
 using System.Diagnostics;
 using System.Security.Claims;
 
@@ -20,6 +21,13 @@ namespace SportsStore.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            if(claim != null)
+            {
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == claim.Value).Count());
+            }
             IEnumerable<Product> allProducts = _unitOfWork.Product.GetAll(includeProperties: "ProductImages").ToList();
             return View(allProducts);
         }
@@ -53,14 +61,17 @@ namespace SportsStore.Areas.Customer.Controllers
                 // Корзина существует 
                 cartFromDb.Count += shoppingCart.Count; //  изменение количества товара
                 _unitOfWork.ShoppingCart.Update(cartFromDb); // обновление корзины 
+                _unitOfWork.Save();
             }
             else
             {
                 // Корзина не существует
                 // Добавление корзины
                 _unitOfWork.ShoppingCart.Add(shoppingCart);
+                _unitOfWork.Save();
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == userId).Count());
             }
-            _unitOfWork.Save();
+            TempData["success"] = "Корзина успешно обновлена";
             return RedirectToAction(nameof(Index));
         }
         public IActionResult GetCategories()

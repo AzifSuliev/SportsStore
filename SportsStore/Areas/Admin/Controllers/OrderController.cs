@@ -11,7 +11,7 @@ using Stripe;
 namespace SportsStore.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize]
+    [Authorize(Roles = StaticDetails.Role_Admin)]
     public class OrderController : Controller
     {
         [BindProperty]

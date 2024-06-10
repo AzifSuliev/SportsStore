@@ -1,4 +1,7 @@
-﻿@using SportsStore.Utility
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@using SportsStore.Utility
 @using System.Security.Claims
 <!DOCTYPE html>
 <html lang="en">
@@ -41,17 +44,30 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="Index">Категории товара</a></li>
-                                <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Список товаров</a></li>
+                                    <li><a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="Index">Список товаров</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     <li><a class="dropdown-item" href="#">Something else here</a></li>
                                 </ul>
                             </li>
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Cart" asp-action="Index">
-                                <i class="bi bi-cart"></i> &nbsp; (0)
-                            </a>
-                        </li>
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetails.SessionCart) != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart"></i> &nbsp;
+                                    (@HttpContextAccessor.HttpContext.Session.GetInt32(StaticDetails.SessionCart))
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                    <i class="bi bi-cart"></i> &nbsp; 
+                                    (0)
+                                </a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

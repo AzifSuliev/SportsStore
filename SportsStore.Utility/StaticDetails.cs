@@ -22,5 +22,7 @@ namespace SportsStore.Utility
         // Статус оплаты
         public const string PaymentStatusApproved = "Оплата подтверждена";
 
+        public const string SessionCart = "SessionShoppingCart";
+
     }
 }

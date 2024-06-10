@@ -60,10 +60,12 @@ namespace SportsStore.Areas.Customer.Controllers
 
         public IActionResult MinusUnit(int cartId)
         {
-            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId, tracked: true);
             if (shoppingCart.Count <= 1)
             {
                 _unitOfWork.ShoppingCart.Remove(shoppingCart);
+                HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart.
+                    GetAll(u => u.AppUserId == shoppingCart.AppUserId).Count() - 1);
             }
             else
             {
@@ -76,7 +78,9 @@ namespace SportsStore.Areas.Customer.Controllers
 
         public IActionResult DeleteItem(int cartId)
         {
-            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId);
+            ShoppingCart shoppingCart = _unitOfWork.ShoppingCart.Get(u => u.Id == cartId, tracked: true);
+            HttpContext.Session.SetInt32(StaticDetails.SessionCart, _unitOfWork.ShoppingCart.
+                   GetAll(u => u.AppUserId == shoppingCart.AppUserId).Count() - 1);
             _unitOfWork.ShoppingCart.Remove(shoppingCart);
             _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
