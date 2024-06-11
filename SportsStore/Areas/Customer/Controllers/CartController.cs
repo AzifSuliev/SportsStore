@@ -203,6 +203,7 @@ namespace SportsStore.Areas.Customer.Controllers
                 _unitOfWork.OrderHeader.UpdateStatus(id, StaticDetails.StatusApproved, StaticDetails.PaymentStatusApproved);
                 _unitOfWork.Save();
             }
+            HttpContext.Session.Clear();
             // Удаление содержимого корзины
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.AppUserId == orderHeader.AppUserId).ToList();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);

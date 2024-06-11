@@ -36,7 +36,7 @@ namespace SportsStore.Areas.Identity.Pages.Account
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -107,7 +107,7 @@ namespace SportsStore.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-            public string Role { get; set; } 
+            public string Role { get; set; }
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
             public string? Name { get; set; }
@@ -184,7 +184,16 @@ namespace SportsStore.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        if (User.IsInRole(StaticDetails.Role_Admin))
+                        {
+                            // если пользователь - админ,
+                            // после создания нового пользователя, он не авторизуется
+                            TempData["success"] = "Новый пользователь был успешно создан";
+                        }
+                        else
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                        }
                         return LocalRedirect(returnUrl);
                     }
                 }
